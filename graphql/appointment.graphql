@@ -1,0 +1,27 @@
+extend type Query @guard {
+    appointments: [Appointment!]! @all(scopes: ["currentmonth"]) @whereAuth(relation: "user")
+    appointmentsByMonth(month: Int!, zeroIndexed: Boolean!): [Appointment!]! @whereAuth(relation: "user") @field(resolver: "App\\GraphQL\\Queries\\Appointment\\GetAppointmentByMonth")
+    appointment(id: ID! @eq): Appointment @find
+}
+
+extend type Mutation @guard {
+    createAppointment(input: AppointmentCreationInput @spread): Appointment @create @inject(context: "user.id", name: "user_id")
+    deleteAppointment(id: ID! @eq): Appointment @delete
+}
+
+type Appointment {
+    id: ID!
+    timeslot: DateTime!
+    user_id: User @belongsTo(relation: "user")
+    veterinarian_id: Veterinarian @belongsTo(relation: "veterinarian")
+    animal_id: Animal @belongsTo(relation: "animal")
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input AppointmentCreationInput {
+    timeslot: DateTime!
+    user_id: ID
+    veterinarian_id: ID!
+    animal_id: ID!
+}

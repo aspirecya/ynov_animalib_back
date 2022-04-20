@@ -1,0 +1,49 @@
+extend type Query @guard {
+    animals: [Animal!]! @all @whereAuth(relation: "user")
+    animal(id: ID! @eq): Animal @find
+}
+
+extend type Mutation @guard {
+    createAnimal(input: AnimalCreationInput @spread): Animal @create @inject(context: "user.id", name: "user_id")
+    updateAnimal(id: ID! @eq, input: AnimalEditionInput @spread): Animal @update
+    deleteAnimal(id: ID! @eq): Animal @delete
+}
+
+type Animal {
+    id: ID!
+    user_id: User @belongsTo(relation: "user")
+    name: String!
+    type: String!
+    sex: String!
+    weight: Float
+    dob: Date!
+    color: String
+    sterile: Boolean
+    tag_id: String
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input AnimalCreationInput {
+    name: String!
+    type: String!
+    sex: String!
+    weight: Float
+    dob: Date!
+    color: String
+    sterile: Boolean
+    tag_id: String
+    picture: Upload
+}
+
+input AnimalEditionInput {
+    name: String
+    type: String
+    sex: String
+    weight: Float
+    dob: Date
+    color: String
+    sterile: Boolean
+    tag_id: String
+    picture: Upload
+}

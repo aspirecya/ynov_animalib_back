@@ -1,0 +1,5 @@
+#import defaults.graphql
+#import user.graphql
+#import animal.graphql
+#import veterinarian.graphql
+#import appointment.graphql

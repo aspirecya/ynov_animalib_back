@@ -1,0 +1,40 @@
+extend type Query {
+    veterinarians: [Veterinarian] @all
+    veterinarian(id: ID! @eq): Veterinarian @find
+}
+
+extend type Mutation @guard {
+    createVeterinarian(input: VeterinarianCreationInput @spread): Veterinarian @create
+    updateVeterinarian(id: ID! @eq, input: VeterinarianEditionInput @spread): Veterinarian @update
+    deleteVeterinarian(id: ID! @eq): Veterinarian @delete
+}
+
+type Veterinarian {
+    id: ID!
+    first_name: String!
+    last_name: String!
+    address: String!
+    city: String!
+    zip_code: String!
+    practice_name: String
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input VeterinarianCreationInput {
+    first_name: String!
+    last_name: String!
+    address: String!
+    city: String!
+    zip_code: String!
+    practice_name: String
+}
+
+input VeterinarianEditionInput {
+    first_name: String
+    last_name: String
+    address: String
+    city: String
+    zip_code: String
+    practice_name: String
+}
